@@ -1,14 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Visualization extends JComponent {
-    //int xPos = 100;
     private int scale;
     private JFrame f;
     private ArrayList<TSNode> nodeList;

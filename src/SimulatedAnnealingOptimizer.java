@@ -32,9 +32,16 @@ public class SimulatedAnnealingOptimizer {
         return TravelRoute;
     }
 
-    private double getCost(ArrayList<Integer> TravelRoute){
-        return Utils.calcDistL2(this.nodeList, TravelRoute);
-        //return Utils.calcDistL1(this.nodeList, TravelRoute);
+    private double getCost(ArrayList<Integer> TravelRoute, int numIteration){
+        // L2-Norm:
+        return Utils.calcDistv2(this.nodeList, TravelRoute);
+
+        //L1-Norm:
+        //return Utils.calcDistv1(this.nodeList, TravelRoute);
+
+        // L2-Norm with Noise
+        //double startSigma = 0.0001;
+        //return Utils.calcDistv2(this.nodeList, TravelRoute) + Utils.calcNoise(numIteration, this.numIterations, startSigma);
     }
 
     private double getTemperature(int numIteration){
@@ -92,7 +99,7 @@ public class SimulatedAnnealingOptimizer {
         for (int numIteration = 0; numIteration < this.numIterations; numIteration++) {
             ArrayList<Integer> neighbour = this.getNeighbour(TravelRoute);
             double prob = Math.min(1.0,
-                    Math.exp(-(this.getCost(neighbour)-this.getCost(TravelRoute))/this.getTemperature(numIteration)));
+                    Math.exp(-(this.getCost(neighbour, numIteration)-this.getCost(TravelRoute, numIteration))/this.getTemperature(numIteration)));
             if (randGen.nextDouble() < prob){
                 TravelRoute = neighbour;
             }
@@ -101,7 +108,7 @@ public class SimulatedAnnealingOptimizer {
                 vis.updateVisualization(TravelRoute);
                 System.out.format(Locale.CANADA,"%d:    Cost: %f    " +
                             "Temp: %f    Travelable: %b%n",
-                    numIteration, Utils.calcDistL2(this.nodeList, TravelRoute), this.getTemperature(numIteration),
+                    numIteration, Utils.calcDistv2(this.nodeList, TravelRoute), this.getTemperature(numIteration),
                     Utils.isTravelable(this.nodeList, TravelRoute));
             }
         }

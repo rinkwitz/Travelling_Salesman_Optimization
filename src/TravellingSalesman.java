@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class TravellingSalesman {
     public static void main(String[] args) {
-        int numNodes = 1000;
+        int numNodes = 100;
         boolean showVisualization = true;
         TSNodeGenerator TSGen = new TSNodeGenerator(numNodes, "euclidean", "all");
         ArrayList<TSNode> nodeList = TSGen.generate();
@@ -10,7 +10,7 @@ public class TravellingSalesman {
                 nodeList, showVisualization);
         ArrayList<Integer> TravelRoute = optimizer.solve();
         System.out.println("\nNumber of Hops: " + (TravelRoute.size()-1) +
-                "\nDistance: " + Utils.calcDistL2(nodeList, TravelRoute) +
+                "\nDistance: " + Utils.calcDistv2(nodeList, TravelRoute) +
                 "\nRoute: " + TravelRoute.toString() +
                 "\nTravelable: " + Utils.isTravelable(nodeList, TravelRoute));
     }

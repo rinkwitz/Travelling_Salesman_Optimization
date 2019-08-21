@@ -9,7 +9,7 @@ public class TSNodeGenerator {
     private String dist;
     private static List<String> allowedDist = Arrays.asList("euclidean", "random");
     private String interconnection;
-    private static List<String> allowedInterconnection = Arrays.asList("all", "random");;
+    private static List<String> allowedInterconnection = Arrays.asList("all", "random");
 
     public TSNodeGenerator(int numNodes, String dist, String interconnection){
         this.numNodes = numNodes;
@@ -61,6 +61,7 @@ public class TSNodeGenerator {
                 }
             }
         }
+        for (TSNode tsNode:nodeList){tsNode.calcIdxOrder();}
         return nodeList;
     }
 

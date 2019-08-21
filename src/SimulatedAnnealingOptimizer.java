@@ -39,9 +39,12 @@ public class SimulatedAnnealingOptimizer {
         //L1-Norm:
         //return Utils.calcDistv1(this.nodeList, TravelRoute);
 
-        // L2-Norm with Noise
+        // L2-Norm with Noise:
         //double startSigma = 0.0001;
         //return Utils.calcDistv2(this.nodeList, TravelRoute) + Utils.calcNoise(numIteration, this.numIterations, startSigma);
+
+        // per node weighted distance:
+        //return Utils.calcDistv3(this.nodeList, TravelRoute);
     }
 
     private double getTemperature(int numIteration){
@@ -87,6 +90,38 @@ public class SimulatedAnnealingOptimizer {
             neighbour.set(idx1, neighbour.get(idx2));
             neighbour.set(idx2, mem);
         }
+
+        // method 2: permutations of neighboring pairs
+        /*int numPermutations = 20;
+        for (int i = 0; i < numPermutations; i++) {
+            boolean idxFound = false;
+            int idx = 1 + randGen.nextInt(neighbour.size()-2);
+            int mem = neighbour.get(idx);
+            neighbour.set(idx, neighbour.get(idx + 1));
+            neighbour.set(idx + 1, mem);
+        }*/
+
+        // method 3: subsequence shuffling:
+        /*int idx1 = randGen.nextInt(neighbour.size() - 2);
+        int idx2 = 1 + idx1 + randGen.nextInt(neighbour.size() - 1 - idx1);
+        idx1++;
+        List<Integer> subList = neighbour.subList(idx1, idx2);
+        Collections.shuffle(subList);
+        ArrayList<Integer> result = new ArrayList<>();
+        result.addAll(neighbour.subList(0, idx1));
+        result.addAll(subList);
+        result.addAll(neighbour.subList(idx2, neighbour.size()));
+        neighbour = result;*/
+
+        // method 4: shuffle all:
+        /*int mem = neighbour.get(0);
+        neighbour.remove(0);
+        neighbour.remove(neighbour.size()-1);
+        Collections.shuffle(neighbour);
+        neighbour.add(0, mem);
+        neighbour.add(mem);*/
+
+
         return neighbour;
     }
 

@@ -30,6 +30,19 @@ public class Utils {
         return dist;
     }
 
+    public static double calcDistv3(ArrayList<TSNode> nodeList, ArrayList<Integer> TravelRoute){
+        double dist = 0.0;
+        for (int i = 1; i < TravelRoute.size(); i++) {
+            if (!nodeList.get(TravelRoute.get(i-1)).getDistMap().containsKey(TravelRoute.get(i))) {
+                dist += BIG_CONST;
+                continue;
+            }
+            dist += Math.pow(nodeList.get(TravelRoute.get(i-1)).getDistMap().get(TravelRoute.get(i)) *
+                    (nodeList.get(TravelRoute.get(i-1)).getIdxOrder().indexOf(TravelRoute.get(i)) + 1), 2.0);
+        }
+        return dist;
+    }
+
     public static double calcNoise(int numIteration, int numIterations, double startSigma){
         return (Utils.randGen.nextGaussian() - 0.5) * startSigma * numIteration / numIterations;
     }

@@ -1,0 +1,111 @@
+import java.util.*;
+import java.util.Collections;
+
+public class SimulatedAnnealingOptimizer {
+    private int numIterations;
+    private double startTemperature;
+    private ArrayList<TSNode> nodeList;
+    private int startId;
+    private boolean showVisualization;
+    private Random randGen = new Random();
+
+
+    public SimulatedAnnealingOptimizer(int numIterations, double startTemperature, ArrayList<TSNode> nodeList,
+                                       boolean showVisualization){
+        this.numIterations = numIterations;
+        this.startTemperature = startTemperature;
+        this.nodeList = nodeList;
+        this.startId = nodeList.get(0).getId();
+        this.showVisualization = showVisualization;
+    }
+
+    private ArrayList<Integer> getInitialRoute(){
+        ArrayList<Integer> TravelRoute = new ArrayList<>();
+        for (int i = 0; i < this.nodeList.size(); i++) {
+            if (i != this.startId){
+                TravelRoute.add(i);
+            }
+        }
+        Collections.shuffle(TravelRoute);
+        TravelRoute.add(0, this.startId);
+        TravelRoute.add(this.startId);
+        return TravelRoute;
+    }
+
+    private double getCost(ArrayList<Integer> TravelRoute){
+        return Utils.calcDistL2(this.nodeList, TravelRoute);
+        //return Utils.calcDistL1(this.nodeList, TravelRoute);
+    }
+
+    private double getTemperature(int numIteration){
+        // linear:
+        //return this.startTemperature -  numIteration * this.startTemperature / this.numIterations;
+
+        // exponential:
+        return this.startTemperature * Math.exp(Math.log(Utils.TINY_CONST / this.startTemperature)
+                / this.numIterations * numIteration);
+
+        // exponential waves:
+        /*if (numIteration < this.numIterations / 3){
+            return this.startTemperature * Math.exp(Math.log(Utils.TINY_CONST / this.startTemperature)
+                        / (this.numIterations / 3) * numIteration);
+        } else if (this.numIterations / 3 <= numIteration&& numIteration < this.numIterations * 2 / 3){
+            return this.startTemperature * Math.exp(Math.log(Utils.TINY_CONST / this.startTemperature)
+                    / (this.numIterations / 3) * (numIteration - this.numIterations / 3));
+        } else {
+            return this.startTemperature * Math.exp(Math.log(Utils.TINY_CONST / this.startTemperature)
+                    / (this.numIterations / 3) * (numIteration - this.numIterations * 2 / 3));
+        }*/
+
+    }
+
+    private ArrayList<Integer> getNeighbour(ArrayList<Integer> TravelRoute){
+        ArrayList<Integer> neighbour = new ArrayList<>();
+        neighbour.addAll(TravelRoute);
+
+        // first method using Permutations:
+        int numPermutations = 1;
+        for (int i = 0; i < numPermutations; i++) {
+            boolean idxFound = false;
+            int idx1 = 0, idx2 = 0;
+            while (!idxFound) {
+                idx1 = 1 + randGen.nextInt(neighbour.size()-2);
+                idx2 = 1 + randGen.nextInt(neighbour.size()-2);
+                if (idx1 != idx2 && this.nodeList.get(neighbour.get(idx1)).getDistMap().containsKey(neighbour.get(idx2))
+                && this.nodeList.get(neighbour.get(idx2)).getDistMap().containsKey(neighbour.get(idx1))){
+                    idxFound = true;
+                }
+            }
+            int mem = neighbour.get(idx1);
+            neighbour.set(idx1, neighbour.get(idx2));
+            neighbour.set(idx2, mem);
+        }
+        return neighbour;
+    }
+
+    public ArrayList<Integer> solve(){
+        ArrayList<Integer> TravelRoute = this.getInitialRoute();
+        Visualization vis = new Visualization(this.nodeList, 500, this.showVisualization);
+        if (this.showVisualization){
+            vis.updateVisualization(TravelRoute);
+        }
+        for (int numIteration = 0; numIteration < this.numIterations; numIteration++) {
+            ArrayList<Integer> neighbour = this.getNeighbour(TravelRoute);
+            double prob = Math.min(1.0,
+                    Math.exp(-(this.getCost(neighbour)-this.getCost(TravelRoute))/this.getTemperature(numIteration)));
+            if (randGen.nextDouble() < prob){
+                TravelRoute = neighbour;
+            }
+            // optional output:
+            if (numIteration % 1000 == 0 || (numIteration + 1) == this.numIterations){
+                vis.updateVisualization(TravelRoute);
+                System.out.format(Locale.CANADA,"%d:    Cost: %f    " +
+                            "Temp: %f    Travelable: %b%n",
+                    numIteration, Utils.calcDistL2(this.nodeList, TravelRoute), this.getTemperature(numIteration),
+                    Utils.isTravelable(this.nodeList, TravelRoute));
+            }
+        }
+        return TravelRoute;
+    }
+
+}

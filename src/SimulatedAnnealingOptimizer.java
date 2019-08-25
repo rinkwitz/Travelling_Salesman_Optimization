@@ -8,6 +8,7 @@ public class SimulatedAnnealingOptimizer {
     private int startId;
     private boolean showVisualization;
     private Random randGen = new Random();
+    private String status;
 
 
     public SimulatedAnnealingOptimizer(int numIterations, double startTemperature, ArrayList<TSNode> nodeList,
@@ -17,6 +18,7 @@ public class SimulatedAnnealingOptimizer {
         this.nodeList = nodeList;
         this.startId = nodeList.get(0).getId();
         this.showVisualization = showVisualization;
+        this.status = "";
     }
 
     private ArrayList<Integer> getInitialRoute(){
@@ -33,18 +35,7 @@ public class SimulatedAnnealingOptimizer {
     }
 
     private double getCost(ArrayList<Integer> TravelRoute, int numIteration){
-        // L2-Norm:
-        return Utils.calcDistv2(this.nodeList, TravelRoute);
-
-        //L1-Norm:
-        //return Utils.calcDistv1(this.nodeList, TravelRoute);
-
-        // L2-Norm with Noise:
-        //double startSigma = 0.0001;
-        //return Utils.calcDistv2(this.nodeList, TravelRoute) + Utils.calcNoise(numIteration, this.numIterations, startSigma);
-
-        // per node weighted distance:
-        //return Utils.calcDistv3(this.nodeList, TravelRoute);
+        return Utils.calcDistSquaredSums(this.nodeList, TravelRoute);
     }
 
     private double getTemperature(int numIteration){
@@ -54,19 +45,6 @@ public class SimulatedAnnealingOptimizer {
         // exponential:
         return this.startTemperature * Math.exp(Math.log(Utils.TINY_CONST / this.startTemperature)
                 / this.numIterations * numIteration);
-
-        // exponential waves:
-        /*if (numIteration < this.numIterations / 3){
-            return this.startTemperature * Math.exp(Math.log(Utils.TINY_CONST / this.startTemperature)
-                        / (this.numIterations / 3) * numIteration);
-        } else if (this.numIterations / 3 <= numIteration&& numIteration < this.numIterations * 2 / 3){
-            return this.startTemperature * Math.exp(Math.log(Utils.TINY_CONST / this.startTemperature)
-                    / (this.numIterations / 3) * (numIteration - this.numIterations / 3));
-        } else {
-            return this.startTemperature * Math.exp(Math.log(Utils.TINY_CONST / this.startTemperature)
-                    / (this.numIterations / 3) * (numIteration - this.numIterations * 2 / 3));
-        }*/
-
     }
 
     private ArrayList<Integer> getNeighbour(ArrayList<Integer> TravelRoute){
@@ -126,11 +104,10 @@ public class SimulatedAnnealingOptimizer {
     }
 
     public ArrayList<Integer> solve(){
+        System.out.println("----------------------------------------------");
+        System.out.println("--- Simulated Annealing:\n");
         ArrayList<Integer> TravelRoute = this.getInitialRoute();
-        Visualization vis = new Visualization(this.nodeList, 500, this.showVisualization);
-        if (this.showVisualization){
-            vis.updateVisualization(TravelRoute);
-        }
+        Visualization vis = new Visualization("Simulated Annealing", this.nodeList, 500, this.showVisualization);
         for (int numIteration = 0; numIteration < this.numIterations; numIteration++) {
             ArrayList<Integer> neighbour = this.getNeighbour(TravelRoute);
             double prob = Math.min(1.0,
@@ -138,14 +115,15 @@ public class SimulatedAnnealingOptimizer {
             if (randGen.nextDouble() < prob){
                 TravelRoute = neighbour;
             }
+
             // optional output:
-            if (numIteration % 1000 == 0 || (numIteration + 1) == this.numIterations){
-                vis.updateVisualization(TravelRoute);
-                System.out.format(Locale.CANADA,"%d:    Cost: %f    " +
-                            "Temp: %f    Travelable: %b%n",
-                    numIteration, Utils.calcDistv2(this.nodeList, TravelRoute), this.getTemperature(numIteration),
-                    Utils.isTravelable(this.nodeList, TravelRoute));
+            if (numIteration % 10000 == 0 || (numIteration + 1) == this.numIterations){
+                this.status = String.format("Iteration: %d    Cost: %f    Temp: %f%n",
+                        numIteration, Utils.calcDistSquaredSums(this.nodeList, TravelRoute), this.getTemperature(numIteration));
+                vis.updateVisualization(TravelRoute, this.status);
+                System.out.format(this.status);
             }
+
         }
         return TravelRoute;
     }

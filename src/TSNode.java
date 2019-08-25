@@ -11,8 +11,6 @@ public class TSNode {
     private double yPos;
     private int id;
     private HashMap<Integer, Double> distMap;
-    private ArrayList<Integer> idxOrder;
-    private ArrayList<Double> valOrder;
 
     public TSNode(){
         this.id = nodeCount;
@@ -44,30 +42,5 @@ public class TSNode {
 
     public double getDist(int otherId){
         return this.distMap.get(otherId);
-    }
-
-    public ArrayList<Integer> getIdxOrder(){return this.idxOrder;}
-
-    public void calcIdxOrder(){
-        this.idxOrder = new ArrayList<>();
-        for (int i:this.distMap.keySet()) {
-            if (this.idxOrder.size() == 0){
-                this.idxOrder.add(i);
-            } else {
-                boolean added = false;
-                for (int j = 0; j < this.idxOrder.size(); j++) {
-                    if (this.distMap.get(i) < this.distMap.get(this.idxOrder.get(j))){
-                        this.idxOrder.add(j, i);
-                        added = true;
-                        break;
-                    }
-                }
-                if (!added){
-                    this.idxOrder.add(i);
-                }
-            }
-        }
-        this.valOrder = new ArrayList<>();
-        for (int i:this.idxOrder){this.valOrder.add(this.distMap.get(i));}
     }
 }

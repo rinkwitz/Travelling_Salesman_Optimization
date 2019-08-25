@@ -2,16 +2,17 @@ import java.util.ArrayList;
 
 public class TravellingSalesman {
     public static void main(String[] args) {
-        int numNodes = 100;
+        int numNodes = 50;
         boolean showVisualization = true;
-        TSNodeGenerator TSGen = new TSNodeGenerator(numNodes, "euclidean", "all");
+        TSNodeGenerator TSGen = new TSNodeGenerator(numNodes, "euclidean");
         ArrayList<TSNode> nodeList = TSGen.generate();
-        SimulatedAnnealingOptimizer optimizer = new SimulatedAnnealingOptimizer(1000000, 50.0,
+
+        // Simulated Annealing:
+        int numIterations = 1000000;
+        double startTemperature = 50.0;
+        SimulatedAnnealingOptimizer optimizer = new SimulatedAnnealingOptimizer(numIterations, startTemperature,
                 nodeList, showVisualization);
-        ArrayList<Integer> TravelRoute = optimizer.solve();
-        System.out.println("\nNumber of Hops: " + (TravelRoute.size()-1) +
-                "\nDistance: " + Utils.calcDistv2(nodeList, TravelRoute) +
-                "\nRoute: " + TravelRoute.toString() +
-                "\nTravelable: " + Utils.isTravelable(nodeList, TravelRoute));
+        ArrayList<Integer> result = optimizer.solve();
+        Utils.showResults(nodeList, result);
     }
 }

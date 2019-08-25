@@ -23,9 +23,8 @@ public class Utils {
     }
 
     public static void showResults(ArrayList<TSNode> nodeList, ArrayList<Integer> result){
-        System.out.println(
-                "\nDistance: " + Utils.calcDistSums(nodeList, result) + "\nRoute: " + result.toString());
+        String resultString = String.format("\nDistance: %f%nRoute: %s", Utils.calcDistSums(nodeList, result), result);
+        System.out.println(resultString);
         System.out.println("\n\n\n");
-        //System.out.println("----------------------------------------------\n\n\n");
     }
 }

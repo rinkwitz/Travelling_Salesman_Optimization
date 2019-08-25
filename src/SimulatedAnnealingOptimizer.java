@@ -10,7 +10,6 @@ public class SimulatedAnnealingOptimizer {
     private Random randGen = new Random();
     private String status;
 
-
     public SimulatedAnnealingOptimizer(int numIterations, double startTemperature, ArrayList<TSNode> nodeList,
                                        boolean showVisualization){
         this.numIterations = numIterations;

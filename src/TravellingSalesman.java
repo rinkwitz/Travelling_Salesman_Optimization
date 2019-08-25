@@ -7,6 +7,8 @@ public class TravellingSalesman {
         TSNodeGenerator TSGen = new TSNodeGenerator(numNodes, "euclidean");
         ArrayList<TSNode> nodeList = TSGen.generate();
 
+        // Particle Swarm Optimization:
+
         // Simulated Annealing:
         int numIterations = 1000000;
         double startTemperature = 50.0;
@@ -14,5 +16,8 @@ public class TravellingSalesman {
                 nodeList, showVisualization);
         ArrayList<Integer> result = optimizer.solve();
         Utils.showResults(nodeList, result);
+
+        // Ant Colony:
+
     }
 }

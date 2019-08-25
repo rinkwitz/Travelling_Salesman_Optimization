@@ -20,7 +20,7 @@ public class Visualization extends JComponent {
         this.scale = scale;
         this.f = new JFrame(this.title);
         this.f.setSize(this.scale, this.scale + 40);
-        this.f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //this.f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.f.setVisible(visible);
         for (TSNode tsNode:this.nodeList){
             Ellipse2D circ = new Ellipse2D.Double(this.scale * tsNode.getxPos() - 4.5,

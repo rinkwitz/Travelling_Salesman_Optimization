@@ -34,7 +34,8 @@ public class SimulatedAnnealingOptimizer {
     }
 
     private double getCost(ArrayList<Integer> TravelRoute, int numIteration){
-        return Utils.calcDistSquaredSums(this.nodeList, TravelRoute);
+        //return Utils.calcDistNegativeAntiproportionalSums(this.nodeList, TravelRoute);
+        return Utils.calcDistSumsSquared(this.nodeList, TravelRoute);
     }
 
     private double getTemperature(int numIteration){
@@ -47,59 +48,19 @@ public class SimulatedAnnealingOptimizer {
     }
 
     private ArrayList<Integer> getNeighbour(ArrayList<Integer> TravelRoute){
-        ArrayList<Integer> neighbour = new ArrayList<>();
-        neighbour.addAll(TravelRoute);
-
-        // first method using Permutations:
-        int numPermutations = 1;
-        for (int i = 0; i < numPermutations; i++) {
-            boolean idxFound = false;
-            int idx1 = 0, idx2 = 0;
-            while (!idxFound) {
-                idx1 = 1 + randGen.nextInt(neighbour.size()-2);
-                idx2 = 1 + randGen.nextInt(neighbour.size()-2);
-                if (idx1 != idx2 && this.nodeList.get(neighbour.get(idx1)).getDistMap().containsKey(neighbour.get(idx2))
-                && this.nodeList.get(neighbour.get(idx2)).getDistMap().containsKey(neighbour.get(idx1))){
-                    idxFound = true;
-                }
-            }
-            int mem = neighbour.get(idx1);
-            neighbour.set(idx1, neighbour.get(idx2));
-            neighbour.set(idx2, mem);
+        int caseNum = randGen.nextInt(4);
+        switch (caseNum){
+            case 0:
+                return Mutation.ReciprocalExchange(TravelRoute);
+            case 1:
+                return Mutation.Insertion(TravelRoute);
+            case 2:
+                return Mutation.Inversion(TravelRoute);
+            case 3:
+                return Mutation.Displacement(TravelRoute);
+            default:
+                return Mutation.ReciprocalExchange(TravelRoute);
         }
-
-        // method 2: permutations of neighboring pairs
-        /*int numPermutations = 20;
-        for (int i = 0; i < numPermutations; i++) {
-            boolean idxFound = false;
-            int idx = 1 + randGen.nextInt(neighbour.size()-2);
-            int mem = neighbour.get(idx);
-            neighbour.set(idx, neighbour.get(idx + 1));
-            neighbour.set(idx + 1, mem);
-        }*/
-
-        // method 3: subsequence shuffling:
-        /*int idx1 = randGen.nextInt(neighbour.size() - 2);
-        int idx2 = 1 + idx1 + randGen.nextInt(neighbour.size() - 1 - idx1);
-        idx1++;
-        List<Integer> subList = neighbour.subList(idx1, idx2);
-        Collections.shuffle(subList);
-        ArrayList<Integer> result = new ArrayList<>();
-        result.addAll(neighbour.subList(0, idx1));
-        result.addAll(subList);
-        result.addAll(neighbour.subList(idx2, neighbour.size()));
-        neighbour = result;*/
-
-        // method 4: shuffle all:
-        /*int mem = neighbour.get(0);
-        neighbour.remove(0);
-        neighbour.remove(neighbour.size()-1);
-        Collections.shuffle(neighbour);
-        neighbour.add(0, mem);
-        neighbour.add(mem);*/
-
-
-        return neighbour;
     }
 
     public ArrayList<Integer> solve(){
@@ -116,9 +77,9 @@ public class SimulatedAnnealingOptimizer {
             }
 
             // optional output:
-            if (numIteration % 10000 == 0 || (numIteration + 1) == this.numIterations){
+            if (numIteration % 1000 == 0 || (numIteration + 1) == this.numIterations){
                 this.status = String.format("Iteration: %d    Cost: %f    Temp: %f%n",
-                        numIteration, Utils.calcDistSquaredSums(this.nodeList, TravelRoute), this.getTemperature(numIteration));
+                        numIteration, Utils.calcDistSumsSquared(this.nodeList, TravelRoute), this.getTemperature(numIteration));
                 vis.updateVisualization(TravelRoute, this.status);
                 System.out.format(this.status);
             }

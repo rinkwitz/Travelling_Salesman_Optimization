@@ -19,7 +19,7 @@ public class Visualization extends JComponent {
         this.nodeList = nodelist;
         this.scale = scale;
         this.f = new JFrame(this.title);
-        this.f.setSize(this.scale, this.scale + 40);
+        this.f.setSize(this.scale, this.scale + 80);
         //this.f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.f.setVisible(visible);
         for (TSNode tsNode:this.nodeList){
@@ -51,8 +51,9 @@ public class Visualization extends JComponent {
         Graphics2D g2 = (Graphics2D) g;
         for (Line2D line:this.lineList){ g2.draw(line); }
         for (Ellipse2D circ:this.circList){ g2.draw(circ); }
-        g2.drawString(this.status, 5, 480);
-        g2.drawString(this.dist, 5, 500);
+        g2.drawString(this.status, 5, 520);
+        g2.drawString(this.dist, 5, 540);
+        //g2.drawRect(0, 0, this.scale, this.scale);
     }
 }
 

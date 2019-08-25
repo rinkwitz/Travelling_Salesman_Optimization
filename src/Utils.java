@@ -14,7 +14,7 @@ public class Utils {
         return dist;
     }
 
-    public static double calcDistSquaredSums(ArrayList<TSNode> nodeList, ArrayList<Integer> TravelRoute){
+    public static double calcDistSumsSquared(ArrayList<TSNode> nodeList, ArrayList<Integer> TravelRoute){
         double dist = 0.0;
         for (int i = 1; i < TravelRoute.size(); i++) {
             dist += Math.pow(nodeList.get(TravelRoute.get(i-1)).getDist(TravelRoute.get(i)), 2.0);
@@ -22,7 +22,15 @@ public class Utils {
         return dist;
     }
 
-    public static void showResults(ArrayList<TSNode> nodeList, ArrayList<Integer> result){
+    public static double calcDistNegativeAntiproportionalSums(ArrayList<TSNode> nodeList, ArrayList<Integer> TravelRoute){
+        double dist = 0.0;
+        for (int i = 1; i < TravelRoute.size(); i++) {
+            dist += nodeList.get(TravelRoute.get(i-1)).getDist(TravelRoute.get(i));
+        }
+        return -1 / dist;
+    }
+
+    public static void showResult(ArrayList<Integer> result, ArrayList<TSNode> nodeList){
         String resultString = String.format("\nDistance: %f%nRoute: %s", Utils.calcDistSums(nodeList, result), result);
         System.out.println(resultString);
         System.out.println("\n\n\n");

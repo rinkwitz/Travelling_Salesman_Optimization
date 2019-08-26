@@ -46,6 +46,21 @@ public class Visualization extends JComponent {
         repaint();
     }
 
+    public void updateVisualizationAntColony(ArrayList<Integer> iterationBestRoute, ArrayList<Integer> globalBestRoute,
+                                             String statusIteration){
+        this.lineList = new ArrayList<>();
+        this.status = statusIteration;
+        this.dist = String.format("Global Best: %f", Utils.calcDistSums(this.nodeList, globalBestRoute));
+        for (int i = 1; i < iterationBestRoute.size(); i++) {
+            Line2D line = new Line2D.Double(this.nodeList.get(iterationBestRoute.get(i-1)).getxPos() * this.scale,
+                    this.nodeList.get(iterationBestRoute.get(i-1)).getyPos() * this.scale,
+                    this.nodeList.get(iterationBestRoute.get(i)).getxPos() * this.scale,
+                    this.nodeList.get(iterationBestRoute.get(i)).getyPos() * this.scale);
+            this.lineList.add(line);
+        }
+        repaint();
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;

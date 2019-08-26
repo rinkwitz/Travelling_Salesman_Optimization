@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Utils {
-    public static double BIG_CONST = 10.0;
+    public static double BIG_CONST = 100000000000.0;
     public static double TINY_CONST = 0.000001;
     public static Random randGen = new Random();
 

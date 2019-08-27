@@ -32,7 +32,15 @@ successively visited cities. For this purpose the cities are numbered from <img 
 To solve the problem, compile and execute the main code in ```TravellingSalesman.java```. In this class you can specify all optimizers of interest and their parameters.
 
 ### Simulated Annealing
+
 ### Ant Colony Optimization
+
+## Visualization
+
+<p align="center">
+<img src="/img/Figure_1.png" alt="correlation figure 1" width="850">
+<img src="/img/Figure_2.png" alt="correlation figure 2" width="850">
+</p>
 
 ## Authors
 
@@ -42,30 +50,11 @@ To solve the problem, compile and execute the main code in ```TravellingSalesman
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
+## References
+
 ## Acknowledgements:
 
 The formulas of this README were create using:
 * [Codecogs online Latex editor](https://www.codecogs.com/latex/eqneditor.php)
 
 
---------------------------------------
-
-```
-PREFIX dbo: <http://dbpedia.org/ontology/> 
-PREFIX dc: <http://purl.org/dc/elements/1.1/> 
-```
-
-<img src="https://latex.codecogs.com/gif.latex?n_D(C)" title="n_D(C)" />
-
-<p align="center">
-<img src="/img/Figure_1.png" alt="correlation figure 1" width="850">
-<img src="/img/Figure_2.png" alt="correlation figure 2" width="850">
-</p>
-
-* Wikidata: ```https://query.wikidata.org/sparql```
-* Factforge: ```http://factforge.net/repositories/ff-news```
-* GraphDB: ```http://0.0.0.0:7200/repositories/projectworldbank```
-
-* [RMLmapper](https://github.com/RMLio/rmlmapper-java/)
-* [LIMES](https://github.com/dice-group/LIMES)
-* [GraphDB](http://graphdb.ontotext.com/)

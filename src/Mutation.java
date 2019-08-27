@@ -5,7 +5,6 @@ public class Mutation {
 
     public static ArrayList<Integer> ReciprocalExchange(ArrayList<Integer> repr){
         ArrayList<Integer> result = new ArrayList<>(repr);
-        boolean idxFound = false;
         int idx1 = 1 + randGen.nextInt(result.size()-2);
         int idx2 = 1 + randGen.nextInt(result.size()-2);
         int mem = result.get(idx1);
@@ -16,7 +15,6 @@ public class Mutation {
 
     public static ArrayList<Integer> Insertion(ArrayList<Integer> repr){
         ArrayList<Integer> result = new ArrayList<>(repr);
-        boolean idxFound = false;
         int idx1 = 1 + randGen.nextInt(result.size()-2);
         int mem = result.remove(idx1);
         int idx2 = 1 + randGen.nextInt(result.size()-2);

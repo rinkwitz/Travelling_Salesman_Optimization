@@ -8,9 +8,9 @@ public class Visualization extends JComponent {
     private int scale;
     private JFrame f;
     private String title;
-    private ArrayList<TSNode> nodeList;
+    private ArrayList<TSNode> nodeList = new ArrayList<>();
     private ArrayList<Ellipse2D> circList = new ArrayList<>();
-    private ArrayList<Line2D> lineList;
+    private ArrayList<Line2D> lineList = new ArrayList<>();
     private String status;
     private String dist;
 
@@ -32,7 +32,7 @@ public class Visualization extends JComponent {
         repaint();
     }
 
-    public void updateVisualization(ArrayList<Integer> TravelRoute, String status){
+    public void updateVisualizationSimulatedAnnealing(ArrayList<Integer> TravelRoute, String status){
         this.lineList = new ArrayList<>();
         this.status = status;
         this.dist = String.format("Distance: %f", Utils.calcDistSums(this.nodeList, TravelRoute));
@@ -51,6 +51,22 @@ public class Visualization extends JComponent {
         this.lineList = new ArrayList<>();
         this.status = statusIteration;
         this.dist = String.format("Global Best: %f", Utils.calcDistSums(this.nodeList, globalBestRoute));
+        for (int i = 1; i < iterationBestRoute.size(); i++) {
+            Line2D line = new Line2D.Double(this.nodeList.get(iterationBestRoute.get(i-1)).getxPos() * this.scale,
+                    this.nodeList.get(iterationBestRoute.get(i-1)).getyPos() * this.scale,
+                    this.nodeList.get(iterationBestRoute.get(i)).getxPos() * this.scale,
+                    this.nodeList.get(iterationBestRoute.get(i)).getyPos() * this.scale);
+            this.lineList.add(line);
+        }
+        repaint();
+    }
+
+    public void updateVisualizationGeneticAlgorithm(ArrayList<Integer> iterationBestRoute, ArrayList<Integer> globalBestRoute,
+                                             String statusIteration){
+        this.lineList = new ArrayList<>();
+        this.status = statusIteration;
+        this.dist = String.format("Global Best Distance: %f   Global Best Fitness: %f", Utils.calcDistSums(this.nodeList,
+                globalBestRoute), Utils.calcFitnessAntiproportionalSums(this.nodeList, globalBestRoute));
         for (int i = 1; i < iterationBestRoute.size(); i++) {
             Line2D line = new Line2D.Double(this.nodeList.get(iterationBestRoute.get(i-1)).getxPos() * this.scale,
                     this.nodeList.get(iterationBestRoute.get(i-1)).getyPos() * this.scale,

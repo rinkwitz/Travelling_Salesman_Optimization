@@ -80,7 +80,7 @@ public class SimulatedAnnealingOptimizer {
             if (numIteration % 1000 == 0 || (numIteration + 1) == this.numIterations){
                 this.status = String.format("Iteration: %d    Cost: %f    Temp: %f%n",
                         numIteration, Utils.calcDistSumsSquared(this.nodeList, TravelRoute), this.getTemperature(numIteration));
-                vis.updateVisualization(TravelRoute, this.status);
+                vis.updateVisualizationSimulatedAnnealing(TravelRoute, this.status);
                 System.out.format(this.status);
             }
 

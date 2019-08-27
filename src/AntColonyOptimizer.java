@@ -88,16 +88,15 @@ public class AntColonyOptimizer {
             this.calcGlobalPheromoneUpdate();
 
             // optional visualization:
-            if (numIteration % 1 == 0){
-                this.status = String.format("Iteration: %d    Iteration Best: %f%n", numIteration,
-                        Utils.calcDistSums(this.nodeList, AntList.get(bestId).getTravelRoute()));
-                System.out.print(this.status);
-                vis.updateVisualizationAntColony(AntList.get(bestId).getTravelRoute(), this.globalBestRoute, this.status);      // iteration best
-            }
             if ((numIteration + 1) == numIterations){
-                this.status = String.format("Iteration: %d    Global Best: %f%n", numIteration, this.globalBestDist);
-                System.out.print(this.status);
-                vis.updateVisualizationAntColony(this.globalBestRoute, this.globalBestRoute, this.status);                                // global best
+                this.status = String.format("Iteration: %d    Global Best: %f", numIteration, this.globalBestDist);
+                System.out.println(this.status);
+                vis.updateVisualizationAntColony(this.globalBestRoute, this.globalBestRoute, this.status);                      // global best
+            } else {
+                this.status = String.format("Iteration: %d    Iteration Best: %f", numIteration,
+                        Utils.calcDistSums(this.nodeList, AntList.get(bestId).getTravelRoute()));
+                System.out.println(this.status);
+                vis.updateVisualizationAntColony(AntList.get(bestId).getTravelRoute(), this.globalBestRoute, this.status);      // iteration best
             }
 
         }

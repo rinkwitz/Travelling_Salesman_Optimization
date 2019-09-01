@@ -17,14 +17,16 @@ public class GeneticAlgorithmOptimizer {
     private ArrayList<Integer> allIds;
     private ArrayList<Integer> globalBestIndividual;
     private double globalBestIndividualFitness;
+    private String method;
 
-    public GeneticAlgorithmOptimizer(int numIterations, int populationSize, int k, int selectionSize, ArrayList<TSNode> nodeList, boolean showVisualization){
+    public GeneticAlgorithmOptimizer(int numIterations, int populationSize, int k, int selectionSize, String method, ArrayList<TSNode> nodeList, boolean showVisualization){
         this.numIterations = numIterations;
         this.populationSize = populationSize;
         this.k = k;
         this.selectionSize = selectionSize;
         this.nodeList = nodeList;
         this.startId = nodeList.get(0).getId();
+        this.method = method;
         this.showVisualization = showVisualization;
         this.allIds = new ArrayList<>();
         for (int i = 0; i < this.populationSize; i++) {this.allIds.add(i);}
@@ -91,7 +93,7 @@ public class GeneticAlgorithmOptimizer {
     public ArrayList<Integer> solve(){
         System.out.println("----------------------------------------------");
         System.out.println("--- Genetic Algorithm:\n");
-        Visualization vis = new Visualization("Genetic Algorithm", this.nodeList, 500, this.showVisualization);
+        Visualization vis = new Visualization("Genetic Algorithm: " + this.method, this.nodeList, 500, this.showVisualization);
 
         // Initialize Population:
         this.population = this.getInitialPopulation();
@@ -133,21 +135,20 @@ public class GeneticAlgorithmOptimizer {
             ArrayList<ArrayList<Integer>> newPopulation = new ArrayList<>();
             for (int numOffspring = 0; numOffspring < this.populationSize; numOffspring++) {
                 ArrayList<Integer> parentIds = this.getRandomIds(selection, 2);
-                //int crossoverMethod = this.randGen.nextInt(2);   // !!!!!  change to 4
-                int crossoverMethod = 1;
+                int crossoverMethod = 0;
+                if (this.method.equals("PMX/CX/OX")){crossoverMethod = this.randGen.nextInt(3);}
+                else if (this.method.equals("ERX")){crossoverMethod = 3;}
                 switch (crossoverMethod){
                     case 0:
-                        // not working !!!
-                        // to be fixed ...
                         newPopulation.add(Crossover.PartiallyMappedCrossover(selection.get(parentIds.get(0)),
                                 selection.get(parentIds.get(1))));
                         break;
                     case 1:
-                       newPopulation.add(Crossover.OrderCrossover(selection.get(parentIds.get(0)),
+                        newPopulation.add(Crossover.CycleCrossover(selection.get(parentIds.get(0)),
                                 selection.get(parentIds.get(1))));
                         break;
                     case 2:
-                        newPopulation.add(Crossover.CycleCrossover(selection.get(parentIds.get(0)),
+                        newPopulation.add(Crossover.OrderCrossover(selection.get(parentIds.get(0)),
                                 selection.get(parentIds.get(1))));
                         break;
                     case 3:

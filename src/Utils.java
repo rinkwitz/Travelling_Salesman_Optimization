@@ -54,4 +54,10 @@ public class Utils {
         System.out.println(resultString);
         System.out.println("\n\n\n");
     }
+
+    public static int intMod(int a, int b){
+        if (b <= 0){throw new IllegalArgumentException("b should be greater than zero!");}
+        if (a >= 0){return a % b;}
+        else {return a - (a / b - 1) * b;}
+    }
 }
